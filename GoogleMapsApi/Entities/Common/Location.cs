@@ -17,6 +17,10 @@ namespace GoogleMapsApi.Entities.Common
 			Latitude = lat;
 			Longitude = lng;
 		}
+        public Location()
+        {
+
+        }
 
 		public string LocationString
 		{
