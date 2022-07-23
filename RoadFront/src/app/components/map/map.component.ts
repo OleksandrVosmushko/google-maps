@@ -1,4 +1,5 @@
 /// <reference types="@types/googlemaps" />
+import { PolylineManager } from '@agm/core';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Command, CommandData } from '../../models/Command';
 import { Marker } from '../../models/Marker';
@@ -17,6 +18,7 @@ export class MapComponent implements OnInit, OnDestroy {
   selectedMarker: Marker
   private defaultLatitude: number;
   private defaultLongitude: number;
+  searchResult: Array<any>;
 
   constructor() {
     this.defaultLatitude = 50.450001;
@@ -103,17 +105,23 @@ export class MapComponent implements OnInit, OnDestroy {
   processCommand(str: string) {
     const command: CommandData = JSON.parse(str);
     console.log(command);
-    if (command.command == Command.Remove) {
+    if (command.command === Command.Remove) {
       this.location.markers.splice(command.data, 1);
       console.log(this.location.markers);
     }
-    else {
+    else if (command.command === Command.ClearAll) {
       this.location.markers = [];
+    }
+    else if (command.command === Command.Search) {
+      this.searchResult = command.data;
+      console.log(this.getStepsFromSearchResult());
     }
   }
 
-  removeElement(idx: number) {
-
+  getStepsFromSearchResult() {
+    if (this.searchResult.length > 0)
+      return this.searchResult[0].routes[0].legs[0].steps;
+    return [];
   }
 
   sendData(marker: Marker, command: Command) {

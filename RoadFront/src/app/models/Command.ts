@@ -4,7 +4,7 @@ export interface CommandData {
 }
 
 export enum Command {
-  Select,
+  Search,
   Add,
   Remove,
   ClearAll

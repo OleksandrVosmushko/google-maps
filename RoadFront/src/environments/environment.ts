@@ -14,7 +14,7 @@ export const environment = {
     { mode: 4, icon: 'walk.png' },
     { mode: 5, icon: 'bike.png' },
   ],
-  apiUrl: ''
+  apiUrl: 'https://localhost:7001/'
 };
 
 /*

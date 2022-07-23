@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { MapComponent } from '../app/components/map/map.component';
-import { AgmCoreModule } from '@agm/core';
+import { AgmCoreModule, GoogleMapsAPIWrapper, PolylineManager } from '@agm/core';
 import { environment } from '../environments/environment'
 import { SearchSideComponent } from './components/search-side/search-side.component';
 import { FormsModule } from '@angular/forms';
@@ -24,7 +24,7 @@ import { FormsModule } from '@angular/forms';
       libraries: ["places", "geometry"]
     })
   ],
-  providers: [],
+  providers: [PolylineManager, GoogleMapsAPIWrapper ],
   bootstrap: [ AppComponent ]
 })
 

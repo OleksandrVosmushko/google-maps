@@ -23,6 +23,7 @@ export class SearchSideComponent implements OnInit {
   isHidden: boolean;
   isClosed: boolean;
   resultExists: boolean;
+  route: Array<any>;
 
   constructor(private renderer: Renderer2, private httpClient: HttpClient) {
     this.buttons = Array<Button>();
@@ -33,6 +34,7 @@ export class SearchSideComponent implements OnInit {
     this.isClosed = false;
     this.searchOnMap = '';
     this.resultExists = false;
+    this.route = [];
   }
 
   getPoints(): Array<Marker>{
@@ -41,7 +43,7 @@ export class SearchSideComponent implements OnInit {
 
   searchByName() {
     return this.httpClient.post<number>(
-      `${environment.apiUrl}/api/users`,
+      `${environment.apiUrl}/direction`,
       this.searchOnMap,
       this.httpOptions
     );
@@ -80,8 +82,32 @@ export class SearchSideComponent implements OnInit {
     this.points = newArr;
   }
 
-  searchNewItem() {
+ async searchNewItem() {
+    const headerDict = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Origin': '*'
+    }
+    const requestOptions = {
+      headers: new HttpHeaders(headerDict),
+    };
+    const directions = []
+    if (this.points.length > 0) {
+    let start = this.points[0];
+      let end = start;
+      for (let idx = 1; idx < this.points.length; ++idx) {
+        end = this.points[idx];
+        const smth = await this.httpClient.get(
+          `${environment.apiUrl}directions?Origin=${start.latitude},${start.longitude}&Destination=${end.latitude},${end.longitude}`,
+          requestOptions
+        ).toPromise();//.subscribe((data: any) => { directions.push(data); console.log(data); });
+        directions.push(smth);
+        start = end;
+      }
+      this.sendData({ command: Command.Search, data: directions });
 
+    }
   }
 
   sendData(data: CommandData) {

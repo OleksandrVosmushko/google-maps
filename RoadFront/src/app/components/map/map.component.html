@@ -5,11 +5,16 @@
   <agm-marker *ngFor="let marker of location.markers"
               [latitude]="marker.latitude"
               [longitude]="marker.longitude"
-              [label]="marker.label"
               (markerClick)="selectMarker($event)">
+    <agm-info-window [disableAutoPan]="true">{{marker.label}}</agm-info-window>
   </agm-marker>
 </agm-map>
-
-<div *ngIf="selectedMarker">
-  Selected Marker is: Longitude {{selectedMarker.latitude}} Latitude {{selectedMarker.longitude}}
-</div>
+<agm-polyline [strokeColor]="'#2196f3'" [visible]="true" [strokeWeight]="3" *ngIf="searchResult" [editable]="false">
+  <ng-container *ngFor="let point of getStepsFromSearchResult()">
+    <agm-polyline-point [latitude]="point.startLocation.latitude" [longitude]="point.startLocation.longitude">
+    </agm-polyline-point>
+    <agm-polyline-point [latitude]="point.endLocation.latitude" [longitude]="point.endLocation.longitude">
+    </agm-polyline-point>
+  </ng-container>
+  
+</agm-polyline>
