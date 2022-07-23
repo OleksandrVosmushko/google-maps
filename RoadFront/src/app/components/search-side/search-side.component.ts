@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output, Renderer2 } from '@angular/cor
 import { Marker } from '../../models/Marker';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Command, CommandData } from '../../models/Command';
 
 @Component({
   selector: 'search-side',
@@ -150,10 +151,23 @@ export class SearchSideComponent implements OnInit {
     this.points = this.previousSearches[idx];
   }
 
-  setValueFromApp(str: string) {
+  processCommand(str: string) {
     console.log(str);
     console.log('test');
-    const marker: Marker = JSON.parse(str);
+    const commandData: CommandData = JSON.parse(str);
+    if (commandData.command == Command.Add) {
+      this.addPointToSearch(commandData.data);
+    }
+    else if (commandData.command == Command.Remove) {
+      this.removeElement(commandData.data)
+    }
+    else {
+      this.points = [];
+    }
+    
+  }
+
+  private addPointToSearch(marker: Marker) {
     let added: boolean = false;
     for (let i = 0; i < this.points.length; ++i) {
       if (this.points[i].label.length === 0) {
