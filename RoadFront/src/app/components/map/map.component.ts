@@ -80,7 +80,7 @@ export class MapComponent implements OnInit, OnDestroy {
         {
           latitude: lat,
           longitude: long,
-          label: this.getReverseGeocodingData(lat, long)
+          label: this.getReverseGeocodingData(lat, long, true)
         }
       ]
     };
@@ -102,8 +102,10 @@ export class MapComponent implements OnInit, OnDestroy {
 
   processCommand(str: string) {
     const command: CommandData = JSON.parse(str);
+    console.log(command);
     if (command.command == Command.Remove) {
       this.location.markers.splice(command.data, 1);
+      console.log(this.location.markers);
     }
     else {
       this.location.markers = [];

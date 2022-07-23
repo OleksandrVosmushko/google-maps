@@ -84,8 +84,8 @@ export class SearchSideComponent implements OnInit {
 
   }
 
-  sendData(marker: Marker) {
-    this.emitData.emit(JSON.stringify(marker));
+  sendData(data: CommandData) {
+    this.emitData.emit(JSON.stringify(data));
   }
 
   addNewItem(lat: number = 0, lng: number = 0, lbl: string = '') {
@@ -126,6 +126,9 @@ export class SearchSideComponent implements OnInit {
 
   removeElement(idx: number) {
     this.points.splice(idx, 1);
+    this.sendData({ command: Command.Remove, data: idx })
+    if (this.points.length === 0)
+      this.sendData({ command: Command.ClearAll, data: null})
   }
 
   reverseElements() {
@@ -152,13 +155,11 @@ export class SearchSideComponent implements OnInit {
   }
 
   processCommand(str: string) {
-    console.log(str);
-    console.log('test');
     const commandData: CommandData = JSON.parse(str);
-    if (commandData.command == Command.Add) {
+    if (commandData.command === Command.Add) {
       this.addPointToSearch(commandData.data);
     }
-    else if (commandData.command == Command.Remove) {
+    else if (commandData.command === Command.Remove) {
       this.removeElement(commandData.data)
     }
     else {
@@ -168,7 +169,7 @@ export class SearchSideComponent implements OnInit {
   }
 
   private addPointToSearch(marker: Marker) {
-    let added: boolean = false;
+    let added = false;
     for (let i = 0; i < this.points.length; ++i) {
       if (this.points[i].label.length === 0) {
         this.points[i] = marker;
