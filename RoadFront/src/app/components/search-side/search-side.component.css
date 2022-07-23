@@ -1,0 +1,148 @@
+.init {
+    position: relative;
+    height: 100vh;
+}
+
+.flex {
+    display: flex;
+}
+
+section {
+  height: 50px;
+  background-color: white;
+  width: 400px;
+  position: relative;
+}
+
+.shortForm {
+    margin-top: 20px;
+    border-radius: 10px;
+    margin-left: 20px;
+}
+
+.shortButtons {
+  box-sizing:border-box;
+  justify-content: flex-end;
+}
+
+.shortButtons div {
+  width: 50px;
+  height: 50px;
+}
+
+.method:hover, .rmv-btn:hover, .reverse-btn:hover{
+    background-color: lightcyan;
+    border-radius: 25px;
+}
+
+.active {
+  background-color: cornflowerblue;
+  border-radius: 25px;
+}
+
+#searchOnMap {
+  height: 30px;
+  width: 70%;
+  margin-top: 7px;
+  border-radius: 15px;
+}
+
+.unfold {
+  height: 100vh;
+  margin-top: 0;
+  justify-content: space-around;
+}
+
+.search-container {
+    justify-content: space-around;
+    align-items: center;
+}
+
+.search-points {
+  flex-direction: column;
+  margin-bottom: 20px;
+  width: 80%;
+  justify-content: space-around;
+}
+
+.add-new {
+  width: 200px;
+  justify-content: space-around;
+  height: 40px;
+  cursor: pointer;
+}
+
+.add-new img {
+    height: 25px;
+}
+
+.point {
+  justify-content: space-around;
+  height: 50px;
+}
+
+.point input {
+    height: 30px;
+    width: 70%;
+    margin-top: 7px;
+    border-radius: 15px;
+  }
+
+.possible-methods {
+    justify-content: center;
+    width: 80%;
+    height: 50px;
+    padding: 20px 0;
+}
+
+.method {
+    width: 50px;
+}
+
+.button-abs {
+  position: absolute;
+}
+
+.close-btn {
+    right: 20px;
+    top: 20px;
+    width: 50px;
+    height: 50px;
+}
+
+.hide-btn {
+  width: 25px;
+  height: 50px;
+  right: -25px;
+  top: 47%;
+  z-index: 1;
+  background-color: white;
+}
+
+.button, .method {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.previous-searches {
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  background-color: aliceblue;
+}
+
+.point {
+    background-color: ghostwhite;
+}
+
+.result {
+    justify-content: space-around;
+    align-items: center;
+}
+
+.result img {
+    width: 25px;
+    height: 25px;
+}
