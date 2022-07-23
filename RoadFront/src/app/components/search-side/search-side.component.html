@@ -1,0 +1,71 @@
+<div class="init">
+  <div  *ngIf="!isHidden">
+    <section class="shortForm" *ngIf="isClosed; else unfolded">
+      <div class="shortButtons flex">
+        <input autofocus="autofocus" placeholder="Пошук на Google Maps" id="searchOnMap" name="searchOnMap"  [(ngModel)]="searchOnMap" />
+        <div class="search-btn button" (click)="searchByName()">
+          <img src="assets/img/search.jpg" />
+        </div>
+        <div class="unfold-btn button" (click)="clickOnClose()">
+          <img src="assets/img/unfold.jpg" />
+        </div>
+      </div>
+    </section>
+    <ng-template #unfolded>
+      <section class="unfold">
+        <div class="possible-methods flex">
+          <span class="method method-{{item.mode}}" [class.active]="currentMode === item.mode" *ngFor="let item of getButtons(); let idx = index" (click)="setMethod(idx)">
+            <img src="/assets/img/{{item.icon}}" />
+          </span>
+        </div>
+        <div class="search-container flex">
+          <div class="search-points flex">
+            <div class="point {{item.label}} flex" *ngFor="let item of getPoints(); let idx = index">
+              <div class="location button">
+                <img src="/assets/img/location.png" />
+              </div>
+              <input id="{{idx}}" value="{{item.label}}" (change)="setValue(idx, $event)" />
+              <div class="rmv-btn button" (click)="removeElement(idx)">
+                <img src="/assets/img/remove.png" />
+              </div>
+            </div>
+            <div class="add-new flex" (click)="addNewItem()">
+              <img src="/assets/img/add.jpg" />
+              <div>Додани новий пункт</div>
+            </div>
+            <div class="flex add-new" (click)="searchNewItem()">
+            <img src="/assets/img/search.jpg" />
+            <div>Пошук</div>
+          </div>
+          </div>
+          <div *ngIf="getPoints().length > 1" class="reverse-btn button" (click)="reverseElements()">
+            <img src="/assets/img/reverse.jpg" />
+          </div>
+        </div>
+        <div class="add-pnt-btn"></div>
+        <div class="button-abs button close-btn" (click)="clickOnClose()">
+          <img src="/assets/img/close.jpg" />
+        </div>
+        <div *ngIf="resultExists" class="result flex">
+          <img src="/assets/img/{{getButtons()[currentMode - 1].icon}}" />
+          <h3></h3>
+          <h3></h3>
+        </div>
+        <div class="previous-searches flex" *ngIf="getPreviousSearches().length > 0">
+          <h3>Попередні пошуки:</h3>
+          <div class="point point-{{idx}}" *ngFor="let item of getPreviousSearches(); let idx = index" (click)="loadFromHistory(idx)">
+            <span>{{ getPreviousSearchString(idx) }}</span>
+          </div>
+          <div class="rmv-btn button" (click)="clearSearches()">
+            <img src="/assets/img/remove.png" />
+            <div>Очистити</div>
+          </div>
+          
+        </div>
+      </section>
+    </ng-template>
+  </div>
+  <div class="button-abs button hide-btn" id="hide-elem" *ngIf="!isClosed" (click)="clickOnHide()">
+    <img src="/assets/img/hide.jpg" />
+  </div>
+</div>
