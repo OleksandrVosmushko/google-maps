@@ -1,5 +1,6 @@
 /// <reference types="@types/googlemaps" />
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Command, CommandData } from '../../models/Command';
 import { Marker } from '../../models/Marker';
 
 declare var google: any;
@@ -42,7 +43,7 @@ export class MapComponent implements OnInit, OnDestroy {
       }
       if (status === google.maps.GeocoderStatus.OK) {
         let address = results[0].formatted_address;
-        address = address.substring(address.indexOf(' ') + 1);
+        //address = address.substring(address.indexOf(' ') + 1);
         if (push) {
           const marker = {
             latitude: lat,
@@ -50,7 +51,7 @@ export class MapComponent implements OnInit, OnDestroy {
             label: address
             };
           this.location.markers.push(marker);
-          this.sendData(marker);
+          this.sendData(marker, Command.Add);
         }
         return address;
       }
@@ -79,7 +80,7 @@ export class MapComponent implements OnInit, OnDestroy {
         {
           latitude: lat,
           longitude: long,
-          label: this.getReverseGeocodingData(lat, long)
+          label: this.getReverseGeocodingData(lat, long, true)
         }
       ]
     };
@@ -90,15 +91,33 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   selectMarker(event: any) {
+    this.getReverseGeocodingData(event.latitude, event.longitude, true);
     this.selectedMarker = {
       latitude: event.latitude,
       longitude: event.longitude,
       label: ""
     }
+    
   }
 
-  sendData(marker: Marker) {
-    this.emitData.emit(JSON.stringify(marker));
+  processCommand(str: string) {
+    const command: CommandData = JSON.parse(str);
+    console.log(command);
+    if (command.command == Command.Remove) {
+      this.location.markers.splice(command.data, 1);
+      console.log(this.location.markers);
+    }
+    else {
+      this.location.markers = [];
+    }
+  }
+
+  removeElement(idx: number) {
+
+  }
+
+  sendData(marker: Marker, command: Command) {
+    this.emitData.emit(JSON.stringify({ command: command, data: marker }));
   }
 
   public ngOnDestroy(): void {

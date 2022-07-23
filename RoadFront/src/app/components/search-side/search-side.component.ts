@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output, Renderer2 } from '@angular/cor
 import { Marker } from '../../models/Marker';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Command, CommandData } from '../../models/Command';
 
 @Component({
   selector: 'search-side',
@@ -83,8 +84,8 @@ export class SearchSideComponent implements OnInit {
 
   }
 
-  sendData(marker: Marker) {
-    this.emitData.emit(JSON.stringify(marker));
+  sendData(data: CommandData) {
+    this.emitData.emit(JSON.stringify(data));
   }
 
   addNewItem(lat: number = 0, lng: number = 0, lbl: string = '') {
@@ -125,6 +126,9 @@ export class SearchSideComponent implements OnInit {
 
   removeElement(idx: number) {
     this.points.splice(idx, 1);
+    this.sendData({ command: Command.Remove, data: idx })
+    if (this.points.length === 0)
+      this.sendData({ command: Command.ClearAll, data: null})
   }
 
   reverseElements() {
@@ -150,11 +154,22 @@ export class SearchSideComponent implements OnInit {
     this.points = this.previousSearches[idx];
   }
 
-  setValueFromApp(str: string) {
-    console.log(str);
-    console.log('test');
-    const marker: Marker = JSON.parse(str);
-    let added: boolean = false;
+  processCommand(str: string) {
+    const commandData: CommandData = JSON.parse(str);
+    if (commandData.command === Command.Add) {
+      this.addPointToSearch(commandData.data);
+    }
+    else if (commandData.command === Command.Remove) {
+      this.removeElement(commandData.data)
+    }
+    else {
+      this.points = [];
+    }
+    
+  }
+
+  private addPointToSearch(marker: Marker) {
+    let added = false;
     for (let i = 0; i < this.points.length; ++i) {
       if (this.points[i].label.length === 0) {
         this.points[i] = marker;

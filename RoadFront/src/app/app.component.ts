@@ -15,13 +15,10 @@ export class AppComponent {
   @ViewChild('search') private search: SearchSideComponent;
 
   emittedDataByMap(data: string) {
-    //this.childData = data;
-    console.log(data);
-    this.search.setValueFromApp(data);
+    this.search.processCommand(data);
   }
 
   emittedDataBySearch(data: string) {
-    //this.childData = data;
-    console.log(data);
+    this.map.processCommand(data);
   }
 }
